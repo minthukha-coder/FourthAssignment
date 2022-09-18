@@ -1,0 +1,235 @@
+#include<stdio.h>
+#include<string.h>
+
+void insert_data();
+void display_data();
+void find_data();
+void update_data();
+
+struct Employee_data{
+    int id;
+    char name[20];
+    int age;
+    int password;
+    double  amount;
+    char location[20];
+
+}emp[10];
+
+
+int main(){
+    FILE *fptr;
+    fptr = fopen("005testw.txt","r");
+    int i = 0;
+    int found = 0;
+    int id = 0;
+    char name[20];
+    int age = 0;
+    int password = 0;
+    double  amount = 0;
+    char location[100];
+    int uPress = 0;
+
+
+    while(1){
+    printf("\nIf you want to insert data / Press 1\nAfter inserting you have to reload file\n\n");
+    printf("If you want to display data / Press 2\n");
+    printf("If you want to find data / Press 3\n");
+    printf("If you want to update / Press 4\n");
+    printf("If you want to reload or exit / Press 5\n");
+    scanf(" %d",&uPress);
+    if (uPress == 1){
+        insert_data();
+    }
+
+    if (uPress == 2){
+        FILE *fptr;
+        fptr = fopen("005testw.txt","r");
+    fscanf(fptr,"%d%s%d%d%lf%s",&emp[i].id,emp[i].name,&emp[i].age,&emp[i].password,&emp[i].amount,emp[i].location);
+    if (feof(fptr)){
+     printf("Database is empty\n");
+    }else{
+       display_data();
+    }
+    }
+
+    if (uPress == 3){
+        FILE *fptr;
+        fptr = fopen("005testw.txt","r");
+    fscanf(fptr,"%d%s%d%d%lf%s",&emp[i].id,emp[i].name,&emp[i].age,&emp[i].password,&emp[i].amount,emp[i].location);
+    if (feof(fptr)){
+     printf("Database is empty\n");
+    }else{
+
+        find_data();
+    }
+    }
+    
+    if (uPress == 4){
+        update_data();
+    }
+
+    if (uPress == 5){
+        exit(0);
+    }
+
+    }
+
+    fclose(fptr);
+
+return 0;
+}
+
+void insert_data(){
+
+    int id = 0;
+    int i = 0;
+    char name[20];
+    int age = 0;
+    int password = 0;
+    double  amount = 0;
+    char location[20];
+    int uPress = 0;
+    char uName[30];
+
+
+    FILE *fptr;
+    fptr = fopen("005testw.txt","a");
+
+    if (fptr == NULL){
+        printf("We cannot open this file");
+    }else{
+    puts("Enter id,name,age,password,amount,location: ");
+    puts("Enter EOF keys to end file: ");
+    printf(">:");
+    scanf("%d%s%d%d%lf%s",&emp[i].id,emp[i].name,&emp[i].age,&emp[i].password,&emp[i].amount,emp[i].location);
+
+    while (!feof(stdin)){
+        fprintf(fptr,"%d %s %d %d %.2f %s\n",emp[i].id,emp[i].name,emp[i].age,emp[i].password,emp[i].amount,emp[i].location);
+        printf(">:");
+        scanf("%d%s%d%d%lf%s",&emp[i].id,emp[i].name,&emp[i].age,&emp[i].password,&emp[i].amount,&emp[i].location);
+    }
+}
+
+fclose(fptr);
+
+}
+
+void display_data(){
+    char c;
+
+    FILE *fptr;
+
+    fptr = fopen("005testw.txt","r");
+     // I have to think
+    while(1){
+    c = getc(fptr);
+
+    if (c == EOF){
+        break;
+    }else{
+    printf("%c",c);
+    }
+    }
+    fclose(fptr);
+}
+
+void find_data(){
+    int i = 0;
+    int found = 0;
+    int id = 0;
+    char name[20];
+    int age = 0;
+    int password = 0;
+    double  amount = 0;
+    char location[20];
+    char uName[20];
+    printf("Please enter name to find: ");
+    scanf("%s",uName);
+
+    FILE *fptr;
+    fptr = fopen("005testw.txt","r");
+    for (i = 0;i < 10;i++){
+    fscanf(fptr,"%d%s%d%d%lf%s",&emp[i].id,emp[i].name,&emp[i].age,&emp[i].password,&emp[i].amount,emp[i].location);
+    if (strcmp(emp[i].name,uName) == 0){
+            found = 1;
+        printf("\n%d %s %d %d %.2f %s\n",emp[i].id,emp[i].name,emp[i].age,emp[i].password,emp[i].amount,emp[i].location);
+    }
+    }
+    if (found == 0){
+        printf("Data not found\n");
+    }
+
+    fclose(fptr);
+
+}
+
+void update_data(){
+    int i = 0;
+    int found = 0;
+    int id = 0;
+    int ch = 0;
+    char name[20];
+    int age = 0;
+    int password = 0;
+    double  amount = 0;
+    char location[100];
+    char uName[20];
+    printf("Please enter name to update: ");
+    scanf("%s",uName);
+    FILE *fptr;
+    fptr = fopen("005testw.txt","r");
+
+    for (i = 0;i < 10;i++){
+    fscanf(fptr,"%d%s%d%d%lf%s",&emp[i].id,emp[i].name,&emp[i].age,&emp[i].password,&emp[i].amount,emp[i].location);
+    if (strcmp(emp[i].name,uName) == 0){
+        found = 1;
+
+        printf("\nWhat do you want to change?\n");
+        printf("If you want to change name / Press 1:\n");
+        printf("If you want to change age / Press 2:\n");
+        printf("If you want to change password / Press 3:\n");
+        printf("If you want to change amount / Press 4:\n");
+        printf("If you want to change location / Press 5:");
+        scanf("%d",&ch);
+
+    if (ch == 1){
+        printf("Please enter new name: ");
+        scanf("%s",&emp[i].name);
+        printf("%d %s %d %d %.2f %s\n\n",emp[i].id,emp[i].name,emp[i].age,emp[i].password,emp[i].amount,emp[i].location);
+    }
+
+    if (ch == 2){
+        printf("Please enter new age: ");
+        scanf("%d",&emp[i].age);
+        printf("%d %s %d %d %.2f %s\n\n",emp[i].id,emp[i].name,emp[i].age,emp[i].password,emp[i].amount,emp[i].location);
+    }
+
+    if (ch == 3){
+        printf("Please enter new password: ");
+        scanf("%d",&emp[i].password);
+        printf("%d %s %d %d %.2f %s\n\n",emp[i].id,emp[i].name,emp[i].age,emp[i].password,emp[i].amount,emp[i].location);
+    }
+
+    if (ch == 4){
+        printf("Please enter new amount: ");
+        scanf("%lf",&emp[i].amount);
+        printf("%d %s %d %d %.2f %s\n\n",emp[i].id,emp[i].name,emp[i].age,emp[i].password,emp[i].amount,emp[i].location);
+    }
+    if (ch == 5){
+        printf("Please enter new location: ");
+        scanf("%s",&emp[i].location);
+        printf("%d %s %d %d %.2f %s\n\n",emp[i].id,emp[i].name,emp[i].age,emp[i].password,emp[i].amount,emp[i].location);
+
+    }
+
+    }
+
+    }
+
+    if (found == 0){
+        printf("Data not found\n");
+    }
+    fclose(fptr);
+}
+
